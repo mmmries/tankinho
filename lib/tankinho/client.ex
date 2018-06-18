@@ -24,6 +24,10 @@ defmodule Tankinho.Client do
     state = %{state | status: :registered}
     {:noreply, state}
   end
+  def handle_info({:udp, _, _, _, "ALIVE?"}, state=%{addr: {addr, port}}) do
+    :ok = :gen_udp.send(state.socket, addr, port, "ALIVE")
+    {:noreply, state}
+  end
   # START_GAME 1600x1024 60
   # game_widthxgame_height tank_size
   def handle_info({:udp, _, _, _, "START_GAME"<>_}, %{status: :registered, addr: {addr,port}}=state) do
