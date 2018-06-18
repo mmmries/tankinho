@@ -31,14 +31,20 @@ defmodule Tankinho.Client do
     state = %{state | status: :playing}
     {:noreply, state}
   end
-  # STATUS {"energy":100,"gun_heading":356,"heading":356,"radar_heading":356,"time":0,"speed":0,"x":1627,"y":1627,"robot_scanned":[],"broadcasts_received":[]}
+  # STATUS {"energy":100,"gun_heading":356,"heading":356,"radar_heading":356,"time":0,"speed":0,"x":1627,"y":1627,"robots_scanned":[],"broadcasts":[]}
   # a status update about the game, time to send in your move
   def handle_info({:udp, _, _, _, "STATUS "<>json}, %{status: :playing, addr: {addr,port}}=state) do
-    IO.puts(json)
+    update = Jason.decode!(json)
+    if update["robots_scanned"] != [] || update["broadcasts"] != [] do
+      IO.puts "SCANNED SOMETHING #{json}"
+    end
+    #if rem(update["time"], 60) == 0 do
+    #  :ok = :gen_udp.send(state.socket, addr, port, "BROADCAST The day will be mine Trebek!")
+    #end
+    :ok = :gen_udp.send(state.socket, addr, port, "SAY Hey man, you think you'd be interested in something like that?")
     :ok = :gen_udp.send(state.socket, addr, port, "ACCELERATE 0.2")
     :ok = :gen_udp.send(state.socket, addr, port, "TURN 1")
     :ok = :gen_udp.send(state.socket, addr, port, "FIRE 0.4")
-    :ok = :gen_udp.send(state.socket, addr, port, "SAY Hey, u GUYZ!")
     {:noreply, state}
   end
   # GAME_OVER
