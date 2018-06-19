@@ -3,7 +3,7 @@ options = case System.argv() do
               [addr: Tankinho.parse_server_addr(server_addr), name: name]
             [server_addr, name, port] ->
               [addr: Tankinho.parse_server_addr(server_addr), name: name, port: String.to_integer(port)]
-            true ->
+            _ ->
               IO.puts "Please provide the address of the server and a name for your bot"
               IO.puts "\teg. mix run client.exs 192.168.0.5:5566 Rusty"
               IO.puts ""
@@ -12,18 +12,7 @@ options = case System.argv() do
               exit(:normal)
           end
 
-defmodule MyTank do
-  alias Tankinho.Actions
-
-  def init(_game_settings) do
-    %{turn_rate: :rand.uniform(30) - 15}
-  end
-
-  def tick(_events, %{turn_rate: rate}=state) do
-    actions = %Actions{} |> Actions.turn(rate) |> Actions.fire(0.25)
-    {actions, state}
-  end
-end
+Code.require_file("my_tank.ex")
 
 {:ok, _} = Tankinho.Client.start_link(%{
   server_addr: Keyword.get(options, :addr),
@@ -32,4 +21,4 @@ end
   port: Keyword.get(options, :port, 5567),
 })
 IO.puts "Started #{Keyword.get(options, :name)}"
-Process.sleep(1_000_000_000)
+Tankinho.LiveReload.watch_for_changes([__DIR__], [MyTank])

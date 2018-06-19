@@ -20,6 +20,7 @@ defmodule Tankinho.MixProject do
   defp deps do
     [
       {:jason, "~> 1.0"},
+      {:file_system, "~> 0.2"},
     ]
   end
 end
