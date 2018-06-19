@@ -10,12 +10,8 @@ defmodule Tankinho.Client do
     {:ok, protocol}
   end
 
-  def handle_info({:udp, _, _, _, packet}, protocol) do
-    protocol = Protocol.handle_packet(protocol, packet)
-    {:noreply, protocol}
-  end
   def handle_info(message, protocol) do
-    protocol = Tankinho.Protocol.handle_info(protocol, message)
+    protocol = Protocol.handle_info(protocol, message)
     {:noreply, protocol}
   end
 end
