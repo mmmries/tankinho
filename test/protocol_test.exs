@@ -56,8 +56,9 @@ defmodule Tankinho.ProtocolTest do
 
   test "we respond to aliveness checks",
   %{client_udp: client, server_udp: server} do
-    Protocol.init("player1", TestTank, {{127,0,0,1}, 5566}, client)
-    |> Protocol.handle_packet("ALIVE?")
+    state = Protocol.init("player1", TestTank, {{127,0,0,1}, 5566}, client)
+            |> Protocol.handle_packet("ALIVE?")
+    assert %Protocol{} = state
     assert_receive {:udp, ^server, _, _, "ALIVE"}
   end
 

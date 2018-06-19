@@ -25,6 +25,7 @@ defmodule Tankinho.Protocol do
   def handle_packet(%__MODULE__{}=state, "REGD"), do: state
   def handle_packet(%__MODULE__{}=state, "ALIVE?") do
     :ok = send_to_server(state, "ALIVE")
+    state
   end
   def handle_packet(%__MODULE__{}=state, "START_GAME "<>settings) do
     [width, height, size] = settings |> String.split([" ","x"]) |> Enum.map(&String.to_integer/1)
