@@ -64,7 +64,6 @@ defmodule Tankinho.ProtocolTest do
 
   test "when a game starts we call the init/1 function on our game module to initialize the game_state" do
     state = Protocol.init("player1", TestTank, {{127,0,0,1}, 5566}, :fake_udp_port)
-            |> Map.put(:status, :playing)
             |> Protocol.handle_packet("START_GAME 1600x1024 60")
     assert state.status == :playing
     assert state.game_state == %{width: 1600, height: 1024, size: 60, foo: "bar"}
@@ -91,5 +90,13 @@ defmodule Tankinho.ProtocolTest do
     assert state.game_state.foo == "baz"
     assert state.status == :playing
     assert_receive {:udp, ^server, _, _, "FIRE 1"}
+  end
+
+  test "on GAME_OVER we go back to registered and clear the game state" do
+    state = Protocol.init("player1", TestTank, {{127,0,0,1}, 5566}, :fake_udp_port)
+            |> Protocol.handle_packet("START_GAME 1600x1024 60")
+            |> Protocol.handle_packet("GAME_OVER")
+    assert state.status == :registered
+    assert state.game_state == nil
   end
 end

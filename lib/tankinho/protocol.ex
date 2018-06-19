@@ -39,6 +39,9 @@ defmodule Tankinho.Protocol do
     actions |> Actions.format_each |> Enum.each(fn(msg) -> send_to_server(state, msg) end)
     %{ state | game_state: game_state }
   end
+  def handle_packet(%__MODULE__{}=state, "GAME_OVER") do
+    %{ state | game_state: nil, status: :registered }
+  end
 
   defp send_to_server(%{server: {addr, port}, udp_port: udp}, message) do
     :gen_udp.send(udp, addr, port, message)
