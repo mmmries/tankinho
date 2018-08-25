@@ -1,4 +1,4 @@
-defmodule MyTank do
+defmodule Tankinho.ExampleTanks.Spinner do
   alias Tankinho.Actions
 
   def init(_game_settings) do
