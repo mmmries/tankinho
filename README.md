@@ -28,7 +28,7 @@ $ mix new tanks
 $ cd tanks
 ```
 
-Add Tankinho to your dependencies:
+Add Tankinho to your dependencies in `mix.exs`:
 
 ```Elixir
 defp deps do
@@ -43,6 +43,12 @@ At this point, you can install deps and run example tanks:
 ```Bash
 $ mix deps.get
 $ mix tankinho.start --server 192.168.2.10:5566 --name Michael --tank Tankinho.ExampleTanks.Spinner
+```
+
+By default you will see messages sent and received printed to the logs. If you want to hide these, you can change your logger level in `config/config.exs`:
+
+```Elixir
+config :logger, level: :info
 ```
 
 Using the examples in `lib/tankinho/example_tanks/` for reference, create your own tank modules. You can then run them as you did the examples:
