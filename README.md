@@ -8,21 +8,59 @@ You can see a demo of the game [here](https://youtu.be/MWC36pFxUrs).
 If you are playing the game on your own you will first need to [get a server started](https://github.com/mmmries/rrobots#usage).
 If you are playing in a group you just need to get the address of the server.
 
-Now you can clone this repo and run it as an example like this:
+### Cloned Repo
+If you don't want to customize your own tank, you can just clone this repo and run examples:
 
-```
+```Bash
 $ git clone https://github.com/mmmries/tankinho.git
 $ cd tankinho
-$ mix do deps.get, compile
-$ mix run client.exs --server 192.168.2.10:5566 --name Michael
+$ mix deps.get
+$ mix tankinho.start --server 192.168.2.10:5566 --name Michael --tank Tankinho.ExampleTanks.Spinner
 ```
 
-Just replace the server address and name above with the address where the server is running and the name you want your tank to have in the game.
+Just replace the server address above with the address where the server is running.
+
+### As a Dependency
+If you want to hang onto your tanks, Tankinho also works as a dependency in your own repo.
+
+```Bash
+$ mix new tanks
+$ cd tanks
+```
+
+Add Tankinho to your dependencies in `mix.exs`:
+
+```Elixir
+defp deps do
+  [
+    {:tankinho, git: "https://github.com/mmmries/tankinho.git"}
+  ]
+end
+```
+
+At this point, you can install deps and run example tanks:
+
+```Bash
+$ mix deps.get
+$ mix tankinho.start --server 192.168.2.10:5566 --name Michael --tank Tankinho.ExampleTanks.Spinner
+```
+
+By default you will see messages sent and received printed to the logs. If you want to hide these, you can change your logger level in `config/config.exs`:
+
+```Elixir
+config :logger, level: :info
+```
+
+Using the examples in `lib/tankinho/example_tanks/` for reference, create your own tank modules. You can then run them as you did the examples:
+
+```Bash
+$ mix tankinho.start --server 192.168.2.10:5566 --name Juggernaut --tank Tanks.Juggernaut
+```
 
 ## Customizing Your Tank
 
-The default tank implementation is in `MyTank.ex`.
-Open that file and you can see a template.
+Example tank implementations are available in `lib/tankinho/example_tanks/`.
+Open an example and you can see a template.
 The basic idea is that you have a module with two functions:
 
  * `init/1` function which is called when you join a game
