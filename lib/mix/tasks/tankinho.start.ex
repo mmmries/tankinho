@@ -35,7 +35,7 @@ defmodule Mix.Tasks.Tankinho.Start do
       })
 
     IO.puts("Started tank #{opts[:name]} from module #{opts[:tank]}")
-    Tankinho.LiveReload.watch_for_changes([__DIR__], [tank])
+    Tankinho.LiveReload.watch_for_changes([__DIR__], [tank_module])
   end
 
   defp check_for_required_options!(opts) do
